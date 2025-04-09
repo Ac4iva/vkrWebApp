@@ -73,7 +73,7 @@
         <!-- Чат -->
         <div class="chat-window">
             <div id="chat-history" style="height: 400px; overflow-y: auto;">
-                <div class="message bot-message">Привет! Я ваш цифровой двойник. Чем могу помочь?</div>
+                <div class="message bot-message">Тут была Ваша реклама</div>
             </div>
             <div style="display: flex; margin-top: 20px;">
                 <input type="text" id="message-input" placeholder="Напишите сообщение...">
@@ -84,9 +84,9 @@
         <!-- Блокчейн-панель -->
         <div class="blockchain-panel">
             <h3>🔗 Данные в блокчейне</h3>
-            <p>ID персоны: <span id="blockchain-id">0x8a3B...f2c7</span></p>
-            <p>Последняя транзакция: <span id="last-tx">Загрузка...</span></p>
-            <p>Всего диалогов: <span id="total-dialogs">12</span></p>
+            <p>ID персоны: <span id="blockchain-id">КакойтоИд</span></p>
+            <p>Последняя транзакция: <span id="last-tx">Бесплатно</span></p>
+            <p>Всего диалогов: <span id="total-dialogs">0</span></p>
         </div>
     </div>
 
@@ -95,11 +95,11 @@
         const tg = Telegram.WebApp;
         tg.expand();
         tg.MainButton
-            .setText("Сохранить личность")
+            .setText("Тут кнопка")
             .show()
             .onClick(() => {
                 tg.sendData(JSON.stringify({
-                    action: 'save_persona',
+                    action: 'text_button',
                     data: chatHistory
                 }));
             });
@@ -110,10 +110,10 @@
         async function generateAIReply(userMessage) {
             // Заглушка: здесь будет вызов вашего ИИ (GPT/LLAMA)
             const responses = [
-                "Интересно! Расскажите подробнее.",
-                "Как вы к этому пришли?",
-                "Понял вас. Что вы хотите сделать дальше?",
-                "У меня похожий опыт. Давайте обсудим!"
+                "Я буду твоими глазами",
+                "Тайное станет явным",
+                "7000 птс в Доте",
+                "Боги покинули это место, и остался только Я"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
