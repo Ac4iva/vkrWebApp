@@ -1,111 +1,57 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Digital Twin AI</title>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Identity</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
+</head>
 <body>
     <div class="container">
-        <!-- Чат -->
-        <div class="chat-window">
-            <div id="chat-history" style="height: 400px; overflow-y: auto;">
-                <div class="message bot-message">Тут была Ваша реклама</div>
+        <!-- Заголовок -->
+        <header class="identity-header">
+            <h1>Моя цифровая личность</h1>
+            <div class="did" id="did">DID: создается...</div>
+        </header>
+
+        <!-- Основные разделы -->
+        <div class="data-section">
+            <div class="data-card">
+                <h2>🔐 Персональные данные</h2>
+                <textarea id="personal-data" placeholder="Введите конф. информацию..."></textarea>
+                <button onclick="encryptData()">Зашифровать и сохранить</button>
             </div>
-            <div style="display: flex; margin-top: 20px;">
-                <input type="text" id="message-input" placeholder="Напишите сообщение...">
-                <button onclick="sendMessage()">Отправить</button>
+
+            <div class="control-card">
+                <h2>🎛 Управление доступом</h2>
+                <div id="permissions-list"></div>
+                <button onclick="showPermissionModal()">Добавить доступ</button>
             </div>
         </div>
 
-        <!-- Блокчейн-панель -->
-        <div class="blockchain-panel">
-            <h3>🔗 Данные в блокчейне</h3>
-            <p>ID персоны: <span id="blockchain-id">КакойтоИд</span></p>
-            <p>Последняя транзакция: <span id="last-tx">Бесплатно</span></p>
-            <p>Всего диалогов: <span id="total-dialogs">0</span></p>
+        <!-- Блокчейн-информация -->
+        <div class="blockchain-info">
+            <h3>⛓ Последние транзакции</h3>
+            <ul id="transaction-list"></ul>
         </div>
     </div>
 
-    <script>
-        // ===== Telegram Integration =====
-        const tg = Telegram.WebApp;
-        tg.expand();
-        tg.MainButton
-            .setText("Тут кнопка")
-            .show()
-            .onClick(() => {
-                tg.sendData(JSON.stringify({
-                    action: 'text_button',
-                    data: chatHistory
-                }));
-            });
+    <!-- Модальное окно разрешений -->
+    <div id="permission-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>🔑 Выдать доступ</h3>
+            <input type="text" id="recipient-address" placeholder="Адрес получателя">
+            <select id="access-level">
+                <option value="read">Только чтение</option>
+                <option value="write">Запись</option>
+            </select>
+            <button onclick="grantAccess()">Подтвердить</button>
+        </div>
+    </div>
 
-        // ===== Имитация ИИ =====
-        let chatHistory = [];
-        
-        async function generateAIReply(userMessage) {
-            // Заглушка: здесь будет вызов вашего ИИ (GPT/LLAMA)
-            const responses = [
-                "Я буду твоими глазами",
-                "Тайное станет явным",
-                "7000 птс в Доте",
-                "Боги покинули это место, и остался только Я"
-            ];
-            return responses[Math.floor(Math.random() * responses.length)];
-        }
-
-        // ===== Блокчейн-заглушка =====
-        async function saveToBlockchain(data) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(`0x${Math.random().toString(16).substr(2, 64)}`);
-                }, 1500);
-            });
-        }
-
-        // ===== Логика чата =====
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const message = input.value.trim();
-            
-            if (!message) return;
-
-            // Добавление сообщения пользователя
-            const chat = document.getElementById('chat-history');
-            chat.innerHTML += `
-                <div class="message user-message">
-                    ${message}
-                </div>
-            `;
-
-            // Генерация ответа
-            const response = await generateAIReply(message);
-            chat.innerHTML += `
-                <div class="message bot-message">
-                    ${response}
-                </div>
-            `;
-
-            // Сохранение в историю
-            chatHistory.push({user: message, bot: response});
-            
-            // Обновление блокчейн-панели
-            document.getElementById('last-tx').textContent = "Сохранение...";
-            const txHash = await saveToBlockchain(chatHistory);
-            document.getElementById('last-tx').textContent = `${txHash.slice(0,12)}...`;
-            document.getElementById('total-dialogs').textContent = chatHistory.length;
-
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        // ===== Инициализация =====
-        tg.ready();
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
